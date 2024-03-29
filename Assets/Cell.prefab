@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sr: {fileID: 5969032715718092070}
-  waterOnClick: 1000
+  waterOnClick: 100
   rowPosition: 0
   colPosition: 0
   waterLevel: 0

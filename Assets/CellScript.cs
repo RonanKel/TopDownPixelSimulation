@@ -11,7 +11,7 @@ public class CellScript : MonoBehaviour
 
     private GridScript gridScript;
 
-    public float waterLevel = 0;
+    public float waterLevel = 0f;
 
     private float blueAmount;
 
@@ -38,9 +38,9 @@ public class CellScript : MonoBehaviour
     void OnMouseDown() {
         //Debug.Log("Clicked! (" + rowPosition + ", " + colPosition + ")");
         waterLevel += waterOnClick;
-        if (waterLevel > 1) {
-            gridScript.nextCellMaxHeap.Add(gameObject);
-        }
+        /*if (waterLevel > 1) {
+            gridScript.cellMaxHeap.Add(gameObject);
+        }*/
         //gridScript.SpreadWater(rowPosition, colPosition);
         
     }

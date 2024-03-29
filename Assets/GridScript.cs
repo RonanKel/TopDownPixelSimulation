@@ -46,7 +46,7 @@ public class GridScript : MonoBehaviour
 
     void Start() 
     {
-        //InvokeRepeating("Flow", 2f, .15f);
+        InvokeRepeating("Flow", 2f, .15f);
     }
 
     // Update is called once per frame
@@ -83,7 +83,7 @@ public class GridScript : MonoBehaviour
         }
     }
 
-    public void SpreadWater(GameObject cell) {
+    /*public void SpreadWater(GameObject cell) {
         //Called by cell of water
 
         currentCellScript = cell.GetComponent<CellScript>();
@@ -124,31 +124,81 @@ public class GridScript : MonoBehaviour
         // For each adjacent cell if it has a lower water level then spread one water there on a delay
 
 
+    }*/
+
+    public void SpreadWater(int rowPosition, int colPosition) {
+
+
+
+        currentCell = matrix[rowPosition][colPosition];
+        currentCellScript = currentCell.GetComponent<CellScript>();
+
+
+        float waterTotal = currentCellScript.GetWaterLevel();
+        int squaresWithLessWater = 1;
+        float averageWaterFlow;
+        List<CellScript> cellScripts = new List<CellScript>();
+
+        //int waterLevel = currentCellScript.waterLevel;
+
+    
+        // see how much water to pass to adjacent squares
+        for (i = (int) Mathf.Max((rowPosition-1), 0f); i < Mathf.Min(rowPosition+2, numRows); i++) {
+            for (j = (int) Mathf.Max(colPosition-1, 0); j < Mathf.Min(colPosition+2, numRows); j++) {
+                adjacentCellScript = matrix[i][j].GetComponent<CellScript>();
+
+                if (adjacentCellScript.waterLevel <= currentCellScript.waterLevel) {
+                    squaresWithLessWater++;
+                    waterTotal += adjacentCellScript.GetWaterLevel();
+                    cellScripts.Add(adjacentCellScript);
+                }
+            }   
+        }
+        
+
+        averageWaterFlow = waterTotal / squaresWithLessWater;
+
+        for (i = 0; i < cellScripts.Count; i++) {
+            cellScripts[i].waterLevel = averageWaterFlow;
+            /*if (averageWaterFlow > 1) {
+                nextCellMaxHeap.Add(cells[i]);
+            }*/
+
+        }
+
+
+        // Find the cell
+
+        // For each adjacent cell if it has a lower water level then spread one water there on a delay
     }
 
     [ContextMenu("Flow")]
     public void Flow() {
 
-        /*Debug.Log("Flowing!");
+        //Debug.Log("Flowing!");
         for (i = 0; i < numRows; i++) {
             for (j = 0; j < numRows; j++) {
                 
                 currentCellScript = matrix[i][j].GetComponent<CellScript>();
-                if (currentCellScript.waterLevel > 1) {
-                    Debug.Log(j);
+                if (currentCellScript.GetWaterLevel() > 1) {
+                    //Debug.Log(j);
                     //SpreadWater(i, j);
                     //Debug.Log("SpreadWater: " + i + " " + j);
                     cellMaxHeap.Add(matrix[i][j]);
                 }
             }
-        }*/
+        }
         while (cellMaxHeap.Count > 0) {
+            
             GameObject cell = cellMaxHeap.ExtractMax();
-            SpreadWater(cell);
+            currentCellScript = cell.GetComponent<CellScript>();
+            
+            SpreadWater(currentCellScript.rowPosition, currentCellScript.colPosition);
+            //SpreadWater(cell);
         }
-        while (nextCellMaxHeap.Count > 0) {
+        /*while (nextCellMaxHeap.Count > 0) {
             cellMaxHeap.Add(nextCellMaxHeap.ExtractMax());
-        }
+        }*/
     }
 
 }
