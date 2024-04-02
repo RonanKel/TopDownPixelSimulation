@@ -28,7 +28,8 @@ public class CellScript : MonoBehaviour
     {
         
         if (waterLevel > 0) {
-            sr.color = new Color(.8f-(waterLevel/(63f)), 1f, 1f, 1f);
+            sr.color = new Color(.6f-(waterLevel/(5f)),1f-(waterLevel/(10f)),1f-(waterLevel/(10f)), 1f);
+            // 10f or 1.25
         } else {
             sr.color = new Color(0f, 0f, 0f, 1f);
         }

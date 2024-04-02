@@ -244,8 +244,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ed74c9569da46249e7f466a6efde27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matrixLength: 8
-  numRows: 100
+  matrixLength: 10
+  numRows: 70
   cell: {fileID: 3929550327435251403, guid: 4aeadd4a3fed44878a11e477bcc4b067, type: 3}
 --- !u!4 &1769050517
 Transform:
