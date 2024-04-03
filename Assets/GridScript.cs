@@ -12,6 +12,8 @@ public class GridScript : MonoBehaviour
     // The Object of each cell
     [SerializeField] GameObject cell;
 
+    public List<GameObject> waterCells = new List<GameObject>();
+
 
 
     public List<List<GameObject>> matrix = new List<List<GameObject>>();
@@ -184,21 +186,55 @@ public class GridScript : MonoBehaviour
                     //Debug.Log(j);
                     //SpreadWater(i, j);
                     //Debug.Log("SpreadWater: " + i + " " + j);
-                    cellMaxHeap.Add(matrix[i][j]);
+                    //cellMaxHeap.Add(matrix[i][j]);
+                    waterCells.Add(matrix[i][j]);
                 }
             }
         }
-        while (cellMaxHeap.Count > 0) {
+
+        //BubbleSort(waterCells, waterCells.Count);
+
+        /*foreach (GameObject cell in waterCells) {
+            currentCellScript = cell.GetComponent<CellScript>();
+            SpreadWater(currentCellScript.rowPosition, currentCellScript.colPosition);
+        }*/
+
+
+        /*while (waterCells.Count > 0) {
             
             GameObject cell = cellMaxHeap.ExtractMax();
             currentCellScript = cell.GetComponent<CellScript>();
             
             SpreadWater(currentCellScript.rowPosition, currentCellScript.colPosition);
             //SpreadWater(cell);
-        }
+        }*/
         /*while (nextCellMaxHeap.Count > 0) {
             cellMaxHeap.Add(nextCellMaxHeap.ExtractMax());
         }*/
+    }
+
+    private List<GameObject> BubbleSort(List<GameObject> cells, int len) {
+        bool swapped;
+        
+
+        for (i = 0; i < len - 1; i++) {
+            swapped = false;
+            for (j = 0; j < len - i - 1; j++) {
+                currentCellScript = cells[j].GetComponent<CellScript>();
+                adjacentCellScript = cells[j+1].GetComponent<CellScript>();
+                if (currentCellScript.waterLevel > adjacentCellScript.waterLevel) {
+                    currentCell = cells[j];
+                    cells[j] = cells[j+1];
+                    cells[j+1] = currentCell;
+                }
+            }
+            if (!swapped) {
+                break;
+            }
+        }
+
+        return cells;
+
     }
 
 }
