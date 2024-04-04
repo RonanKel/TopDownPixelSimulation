@@ -31,13 +31,17 @@ public class CellScript : MonoBehaviour
             sr.color = new Color(.6f-(waterLevel/(5f)),1f-(waterLevel/(10f)),1f-(waterLevel/(10f)), 1f);
             // 10f or 1.25
         } else {
-            sr.color = new Color(0f, 0f, 0f, 1f);
+            sr.color = new Color(1f, 1f, 1f, 1f);
         }
         
     }
 
     void OnMouseDown() {
         //Debug.Log("Clicked! (" + rowPosition + ", " + colPosition + ")");
+        if (waterLevel <= 0f) {
+            gridScript.nextWaterCells.Add(gameObject);
+        }
+        Debug.Log("Clicked!" + rowPosition + colPosition);
         waterLevel += waterOnClick;
         /*if (waterLevel > 1) {
             gridScript.cellMaxHeap.Add(gameObject);
