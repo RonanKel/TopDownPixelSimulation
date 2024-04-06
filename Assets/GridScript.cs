@@ -12,6 +12,9 @@ public class GridScript : MonoBehaviour
     // The Object of each cell
     [SerializeField] GameObject cell;
 
+    [SerializeField] GameObject brush;
+
+
     public List<GameObject> waterCells = new List<GameObject>();
     public List<GameObject> nextWaterCells = new List<GameObject>();
 
@@ -36,6 +39,8 @@ public class GridScript : MonoBehaviour
 
     public MaxHeap cellMaxHeap = new MaxHeap();
     public MaxHeap nextCellMaxHeap = new MaxHeap();
+
+    private string mouseMode = "";
 
 
 
@@ -87,58 +92,25 @@ public class GridScript : MonoBehaviour
         }
     }
 
-    /*public void SpreadWater(GameObject cell) {
-        //Called by cell of water
-
-        currentCellScript = cell.GetComponent<CellScript>();
-        int rowPosition = currentCellScript.rowPosition;
-        int colPosition = currentCellScript.colPosition;
-        float waterTotal = 0;
-        int squaresWithLessWater = 0;
-        float averageWaterFlow;
-        List<GameObject> cells = new List<GameObject>();
-        //int waterLevel = currentCellScript.waterLevel;
-
     
-        // see how much water to pass to adjacent squares
-        for (i = (int) Mathf.Max((rowPosition-1), 0f); i < Mathf.Min(rowPosition+2, numRows); i++) {
-            for (j = (int) Mathf.Max(colPosition-1, 0); j < Mathf.Min(colPosition+2, numRows); j++) {
-                adjacentCellScript = matrix[i][j].GetComponent<CellScript>();
-
-                if (adjacentCellScript.GetWaterLevel() <= currentCellScript.waterLevel) {
-                    squaresWithLessWater++;
-                    waterTotal += adjacentCellScript.GetWaterLevel();
-                    cells.Add(matrix[i][j]);
-                }
-            }
-        }
-        averageWaterFlow = waterTotal / squaresWithLessWater;
-
-        for (i = 0; i < cells.Count; i++) {
-            cells[i].GetComponent<CellScript>().waterLevel = averageWaterFlow;
-            if (averageWaterFlow > 1) {
-                nextCellMaxHeap.Add(cells[i]);
-            }
-
-        }
-
-
-        // Find the cell
-
-        // For each adjacent cell if it has a lower water level then spread one water there on a delay
-
-
-    }*/
 
     public void SpreadWater(GameObject cell) {
         int i;
         int j;
+
+        
+
         Debug.Log("Spreading water!");
 
         currentCellScript = cell.GetComponent<CellScript>();
 
         int rowPosition = currentCellScript.rowPosition;
         int colPosition = currentCellScript.colPosition;
+
+        int startI = (int) Mathf.Max((rowPosition-1), 0f);
+        int endI = (int) Mathf.Min(rowPosition+2, numRows);
+        int startJ = (int) Mathf.Max(colPosition-1, 0f);
+        int endJ = (int) Mathf.Min(colPosition+2, numRows);
 
         float waterTotal = 0f;
         int squaresWithLessWater = 0;
@@ -149,8 +121,8 @@ public class GridScript : MonoBehaviour
 
     
         // see how much water to pass to adjacent squares
-        for (i = (int) Mathf.Max((rowPosition-1), 0f); i < Mathf.Min(rowPosition+2, numRows); i++) {
-            for (j = (int) Mathf.Max(colPosition-1, 0f); j < Mathf.Min(colPosition+2, numRows); j++) {
+        for (i = startI; i < endI; i++) {
+            for (j = startJ; j < endJ; j++) {
                 adjacentCellScript = matrix[i][j].GetComponent<CellScript>();
 
                 if (adjacentCellScript.waterLevel <= currentCellScript.waterLevel) {
@@ -187,58 +159,22 @@ public class GridScript : MonoBehaviour
         //waterCells = nextWaterCells;
         //nextWaterCells = new List<GameObject>();
         
+        waterCells.AddRange(nextWaterCells);
 
-        foreach (GameObject cell in nextWaterCells) {
+        /*foreach (GameObject cell in nextWaterCells) {
             waterCells.Add(cell);
-        }
+        }*/
 
         nextWaterCells.Clear();
 
         // Sort this list in decreasing order
+        BubbleSort(waterCells, waterCells.Count);
 
         for (i = 0; i < waterCells.Count; i++){
             if (waterCells[i].GetComponent<CellScript>().waterLevel >= 1f) {
                 SpreadWater(waterCells[i]);
             }
         }
-        
-
-
-
-        //Debug.Log("Flowing!");
-        /*for (i = 0; i < numRows; i++) {
-            for (j = 0; j < numRows; j++) {
-                
-                currentCellScript = matrix[i][j].GetComponent<CellScript>();
-                if (currentCellScript.GetWaterLevel() > 1) {
-                    //Debug.Log(j);
-                    //SpreadWater(i, j);
-                    //Debug.Log("SpreadWater: " + i + " " + j);
-                    //cellMaxHeap.Add(matrix[i][j]);
-                    waterCells.Add(matrix[i][j]);
-                }
-            }
-        }
-
-        //BubbleSort(waterCells, waterCells.Count);
-
-        /*foreach (GameObject cell in waterCells) {
-            currentCellScript = cell.GetComponent<CellScript>();
-            SpreadWater(currentCellScript.rowPosition, currentCellScript.colPosition);
-        }*/
-
-
-        /*while (waterCells.Count > 0) {
-            
-            GameObject cell = cellMaxHeap.ExtractMax();
-            currentCellScript = cell.GetComponent<CellScript>();
-            
-            SpreadWater(currentCellScript.rowPosition, currentCellScript.colPosition);
-            //SpreadWater(cell);
-        }*/
-        /*while (nextCellMaxHeap.Count > 0) {
-            cellMaxHeap.Add(nextCellMaxHeap.ExtractMax());
-        }*/
     }
 
     private List<GameObject> BubbleSort(List<GameObject> cells, int len) {
@@ -265,6 +201,25 @@ public class GridScript : MonoBehaviour
 
         return cells;
 
+    }
+
+    public void AddWaterClickButton() {
+        mouseMode = "water";
+        brush.SetActive(false);
+    }
+
+    public string CheckMouseType() {
+        return mouseMode;
+    }
+
+
+
+    public void ChangeElevationBrushButton() {
+        // change the mouse type
+        mouseMode = "elevation";
+
+        //enable the brush
+        brush.SetActive(true);
     }
 
 }

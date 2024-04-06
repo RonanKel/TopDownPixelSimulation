@@ -38,11 +38,16 @@ public class CellScript : MonoBehaviour
 
     void OnMouseDown() {
         //Debug.Log("Clicked! (" + rowPosition + ", " + colPosition + ")");
-        if (waterLevel <= 0f) {
+
+        if (gridScript.CheckMouseType() == "water") {
+            if (waterLevel <= 0f) {
             gridScript.nextWaterCells.Add(gameObject);
+            }
+            Debug.Log("Clicked!" + rowPosition + colPosition);
+            waterLevel += waterOnClick;
         }
-        Debug.Log("Clicked!" + rowPosition + colPosition);
-        waterLevel += waterOnClick;
+
+        
         /*if (waterLevel > 1) {
             gridScript.cellMaxHeap.Add(gameObject);
         }*/
